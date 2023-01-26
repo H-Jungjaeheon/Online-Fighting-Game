@@ -1,43 +1,57 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class BasicCharacter : MonoBehaviour
 {
-    #region Ä³¸¯ÅÍ ½ºÅÈ °ü·Ã ¸ğÀ½
-    [Header("Ä³¸¯ÅÍ ½ºÅÈ °ü·Ã ¸ğÀ½")]
+    #region ìºë¦­í„° ìŠ¤íƒ¯ ê´€ë ¨ ëª¨ìŒ
+    [Header("ìºë¦­í„° ìŠ¤íƒ¯ ê´€ë ¨ ëª¨ìŒ")]
     
     [SerializeField]
-    [Tooltip("°ø°İ·Â")]
+    [Tooltip("ê³µê²©ë ¥")]
     protected int damage;
 
     [SerializeField]
-    [Tooltip("Ã¼·Â")]
+    [Tooltip("ì²´ë ¥")]
     protected int hp;
 
     [SerializeField]
-    [Tooltip("ÀÌµ¿¼Óµµ")]
+    [Tooltip("ì´ë™ì†ë„")]
     protected float speed;
     #endregion
 
-    #region ´ë½¬ °ü·Ã ¸ğÀ½
-    [Header("´ë½¬ °ü·Ã ¸ğÀ½")]
+    #region ëŒ€ì‰¬ ê´€ë ¨ ëª¨ìŒ
+    [Header("ëŒ€ì‰¬ ê´€ë ¨ ëª¨ìŒ")]
 
-    [Tooltip("´ë½¬ ÆÄ¿ö(¼Ó·Â)")]
+    [Tooltip("ëŒ€ì‰¬ íŒŒì›Œ(í˜)")]
     private const int DASH_POWER = 1000;
 
-    [Tooltip("´ë½¬ ÄğÅ¸ÀÓÀÎÁö ÆÇº°")]
+    [Tooltip("ëŒ€ì‰¬ ì¿¨íƒ€ì„ì¸ì§€ íŒë³„")]
     private bool isDashCoolTime;
 
-    [Tooltip("´ë½¬ È¿°ú Á¾·á µô·¹ÀÌ")]
+    [Tooltip("ëŒ€ì‰¬ íš¨ê³¼ ì¢…ë£Œ ë”œë ˆì´")]
     WaitForSeconds dashDelay = new WaitForSeconds(0.1f);
 
-    [Tooltip("´ë½¬ ÄğÅ¸ÀÓ µô·¹ÀÌ")]
+    [Tooltip("ëŒ€ì‰¬ ì¿¨íƒ€ì„ ë”œë ˆì´")]
     WaitForSeconds dashCoolTime = new WaitForSeconds(2f);
     #endregion
 
+    #region ì í”„ ê´€ë ¨ ëª¨ìŒ
+    [Header("ì í”„ ê´€ë ¨ ëª¨ìŒ")]
+
+    [Tooltip("ì í”„ íŒŒì›Œ(í˜)")]
+    private const int JUMP_POWER = 675;
+
+    [Tooltip("ì í”„ì¤‘ì¸ì§€ íŒë³„")]
+    private bool isJumping;
+    #endregion
+
     [SerializeField]
-    [Tooltip("ÀÚ½ÅÀÇ Rigidbody2D ÄÄÆ÷³ÍÆ®")]
+    [Tooltip("ê°•ì²´ ë²”ìœ„ ì˜¤ë¸Œì íŠ¸")]
+    private GameObject rigidObj;
+
+    [SerializeField]
+    [Tooltip("ìì‹ ì˜ Rigidbody2D ì»´í¬ë„ŒíŠ¸")]
     Rigidbody2D rigid;
 
     Vector3 speedVector;
@@ -52,21 +66,27 @@ public class BasicCharacter : MonoBehaviour
     void FixedUpdate()
     {
         Move();
+        rigidObj.transform.position = transform.position;
     }
 
     void StartSetting()
     {
+        //Physics2D.IgnoreCollision(GetComponent<BoxCollider2D>(), GetComponentsInChildren<BoxCollider2D>()[1]);
+
         speedVector = new Vector3(speed, 0, 0);
+
         StartCoroutine(Dash());
+        StartCoroutine(Jump());
     }
 
     IEnumerator Jump()
     {
         while (true)
         {
-            if (Input.GetKeyDown(KeyCode.W))
+            if (Input.GetKey(KeyCode.W) && isJumping == false)
             {
-                rigid.AddForce(Vector2.up * 10);
+                isJumping = true;
+                rigid.AddForce(Vector2.up * JUMP_POWER);
             }
 
             yield return null;
@@ -74,7 +94,7 @@ public class BasicCharacter : MonoBehaviour
     }
 
     /// <summary>
-    /// ´ë½¬ Å° ÀÔ·Â ¹Ş°í ´ë½¬ ½ÃÀÛÇÏ´Â ÇÔ¼ö
+    /// ëŒ€ì‰¬ í‚¤ ì…ë ¥ ë°›ê³  ëŒ€ì‰¬ ì‹œì‘í•˜ëŠ” í•¨ìˆ˜
     /// </summary>
     /// <returns></returns>
     IEnumerator Dash()
@@ -102,7 +122,7 @@ public class BasicCharacter : MonoBehaviour
     }
 
     /// <summary>
-    /// ´ë½¬ ÄğÅ¸ÀÓ ¹× ´ë½¬ È¿°ú Á¾·á ÇÔ¼ö
+    /// ëŒ€ì‰¬ ì¿¨íƒ€ì„ ë° ëŒ€ì‰¬ íš¨ê³¼ ì¢…ë£Œ í•¨ìˆ˜
     /// </summary>
     /// <returns></returns>
     IEnumerator DashEffect()
@@ -117,7 +137,7 @@ public class BasicCharacter : MonoBehaviour
     }
 
     /// <summary>
-    /// ÀÌµ¿ ÇÔ¼ö
+    /// ì´ë™ í•¨ìˆ˜
     /// </summary>
     private void Move()
     {
@@ -132,9 +152,9 @@ public class BasicCharacter : MonoBehaviour
     }
 
     /// <summary>
-    /// °ø°İ ¸Â¾ÒÀ» ¶§ ½ÇÇàÇÏ´Â ÇÔ¼ö
+    /// ê³µê²© ë§ì•˜ì„ ë•Œ ì‹¤í–‰í•˜ëŠ” í•¨ìˆ˜
     /// </summary>
-    /// <param name="damage"> ÇöÀç ¹ŞÀº µ¥¹ÌÁö </param>
+    /// <param name="damage"> í˜„ì¬ ë°›ì€ ë°ë¯¸ì§€ </param>
     public void Hit(int damage)
     {
         hp -= damage;
@@ -144,12 +164,20 @@ public class BasicCharacter : MonoBehaviour
     }
 
     /// <summary>
-    /// °ø°İ ¸Â¾ÒÀ» ¶§ Ä³¸¯ÅÍ È¿°ú ÇÔ¼ö
+    /// ê³µê²© ë§ì•˜ì„ ë•Œ ìºë¦­í„° íš¨ê³¼ í•¨ìˆ˜
     /// </summary>
     /// <returns></returns>
     IEnumerator HitAction()
     {
 
         yield return null;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isJumping = false;
+        }
     }
 }
