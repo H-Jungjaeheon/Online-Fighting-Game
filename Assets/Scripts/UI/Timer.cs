@@ -11,11 +11,29 @@ public class Timer : MonoBehaviour
     private int min;
     private int sec;
 
+    private bool isPause;
+
     private void Start()
+    {
+        StartSet();
+    }
+
+    public void StartSet()
     {
         time = maxTime;
     }
-    void Update()
+
+    public void TimerPause()
+    {
+        isPause = true;
+    }
+
+    public void TimerPlay()
+    {
+        isPause = false;
+    }
+
+    private void TimeCalculation()
     {
         time -= Time.deltaTime;
 
@@ -24,13 +42,22 @@ public class Timer : MonoBehaviour
 
         if (sec < 10)
         {
-            timerTxt.text = $"{min} : 0{sec}" ;
+            timerTxt.text = $"{min}:0{sec}";
         }
         else
         {
-            timerTxt.text = $"{min} : {sec}" ;
+            timerTxt.text = $"{min}:{sec}";
         }
 
         if (time <= 0) print("stop");
+    }
+
+
+    void Update()
+    {
+
+        if (isPause == true) return;
+
+        TimeCalculation();
     }
 }
