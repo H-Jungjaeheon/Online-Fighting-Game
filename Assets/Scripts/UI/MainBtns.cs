@@ -14,16 +14,17 @@ public class MainBtns : MonoBehaviour
     private EMainWndType mainWndType;
 
     [SerializeField] private GameObject wnd;
-    readonly float wndStartPosX = -1920;
-    readonly float wndEndPosX = 0;
+    private readonly Vector2 wndStartPos = new Vector2(-1920, 0);
+    private readonly Vector2 wndEndPos = Vector2.zero;
+
 
     public void BtnSet(int num)
     {
         mainWndType = (EMainWndType)num;
-        wnd.transform.position = new Vector2(wndStartPosX, 0);
+        wnd.transform.position = wndStartPos;
 
 
-        wnd.transform.DOMoveX(wndEndPosX, 2f);
+        wnd.transform.DOMoveX(wndEndPos.x, 2f);
 
         WndSet();
     }

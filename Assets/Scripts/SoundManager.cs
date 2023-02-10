@@ -1,50 +1,50 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 public enum ESoundSources
 {
     BGM,
     BUTTON,
     END
 }
+
 public class SoundManager : MonoBehaviour
 {
     private List<AudioClip> audioSources = new List<AudioClip>();
-
     public float BGMVolum;
     public float SFXVolum;
 
     public AudioSource bgm;
+
     private void Awake()
     {
-        for (int i = 0; i < ((int)ESoundSources.END); i++)
+        for (int i = 0; i < (int)ESoundSources.END; i++)
         {
             audioSources.Add(Resources.Load<AudioClip>("Audio/" + ((ESoundSources)i).ToString()));
         }
 
-        if(audioSources.Count > 0)
         PlaySound(ESoundSources.BGM);
     }
 
     public void PlaySound(ESoundSources source)
     {
+        AudioClip audioClip = audioSources[(int)source];
+        float volume = (source == ESoundSources.BGM) ? BGMVolum : SFXVolum;
+        bool loop = (source == ESoundSources.BGM);
 
-        GameObject go = new GameObject("sound");
-
-        AudioSource audio = go.AddComponent<AudioSource>();
-        audio.clip = audioSources[((int)source)];
+        AudioSource audio = gameObject.AddComponent<AudioSource>();
+        audio.clip = audioClip;
+        audio.volume = volume;
+        audio.loop = loop;
+        audio.Play();
 
         if (source == ESoundSources.BGM)
         {
             bgm = audio;
-            audio.volume = BGMVolum;
-            audio.loop = true;
         }
-        else audio.volume = SFXVolum;
-        audio.Play();
-
-        if (source != ESoundSources.BGM)
-            Destroy(go, audio.clip.length);
+        else
+        {
+            Destroy(audio, audioClip.length);
+        }
     }
-
 }
