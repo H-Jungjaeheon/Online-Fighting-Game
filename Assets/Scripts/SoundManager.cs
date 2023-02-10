@@ -11,8 +11,7 @@ public enum ESoundSources
 public class SoundManager : MonoBehaviour
 {
     private List<AudioClip> audioSources = new List<AudioClip>();
-    public float BGMVolum;
-    public float SFXVolum;
+    public float MasterVolum;
 
     public AudioSource bgm;
 
@@ -29,12 +28,11 @@ public class SoundManager : MonoBehaviour
     public void PlaySound(ESoundSources source)
     {
         AudioClip audioClip = audioSources[(int)source];
-        float volume = (source == ESoundSources.BGM) ? BGMVolum : SFXVolum;
         bool loop = (source == ESoundSources.BGM);
 
         AudioSource audio = gameObject.AddComponent<AudioSource>();
         audio.clip = audioClip;
-        audio.volume = volume;
+        audio.volume = MasterVolum;
         audio.loop = loop;
         audio.Play();
 

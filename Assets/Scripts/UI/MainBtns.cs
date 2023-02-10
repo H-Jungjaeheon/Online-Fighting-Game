@@ -1,50 +1,46 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 public enum EMainWndType
 {
-    RoomCreate,
     OnlinePlay,
+    OfflinePlay,
     Setting,
+    PlayGuid,
+    Creators,
     Exit
 }
 public class MainBtns : MonoBehaviour
 {
     private EMainWndType mainWndType;
 
-    [SerializeField] private GameObject wnd;
+    [SerializeField] private GameObject fadeWnd;
+    [SerializeField] private GameObject[] wnd;
     private readonly Vector2 wndStartPos = new Vector2(-1920, 0);
     private readonly Vector2 wndEndPos = Vector2.zero;
 
 
     public void BtnSet(int num)
     {
+        fadeWnd.SetActive(true);
+
         mainWndType = (EMainWndType)num;
-        wnd.transform.position = wndStartPos;
+        wnd[((int)mainWndType)].transform.position = wndStartPos;
 
-
-        wnd.transform.DOMoveX(wndEndPos.x, 2f);
-
-        WndSet();
-    }
-
-    private void WndSet()
-    {
-        switch (mainWndType)
+        fadeWnd.GetComponent<Image>().DOFade(0.3f, 0.5f).OnComplete(() =>
         {
-            case EMainWndType.RoomCreate:
-                break;
-            case EMainWndType.OnlinePlay:
-                break;
-            case EMainWndType.Setting:
-                break;
-            case EMainWndType.Exit:
-                break;
-        }
-
+            wnd[((int)mainWndType)].transform.DOMoveX(wndEndPos.x, 0.5f);
+        });
     }
 
-
+    public void GoBack()
+    {
+        wnd[((int)mainWndType)].transform.DOMoveX(wndStartPos.x, 0.5f).OnComplete(() =>
+        {
+            fadeWnd.GetComponent<Image>().DOFade(0f, 0.5f).OnComplete(() => fadeWnd.SetActive(false));
+        });
+    }
 
 }

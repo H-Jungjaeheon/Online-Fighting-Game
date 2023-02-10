@@ -1,34 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using TMPro;
 public class Setting : MonoBehaviour
 {
     [SerializeField] private SoundManager SM;
+    [SerializeField] private TextMeshProUGUI volumValue;
 
-    private bool isFullScreen = true;// true : 전체화면 , false : 창 화면
-    [SerializeField] private GameObject fullScreenCheckBox;
-    [SerializeField] private GameObject windowScreenCheckBox;
     const int setWidth = 1920;
     const int setHeight = 1080;
-    public void WndChangeBtn(bool type)
-    {
-        isFullScreen = type;
+    private bool isFullScreen = true;// true : 전체화면 , false : 창 화면
+    [SerializeField] private TextMeshProUGUI screenType;
 
-        fullScreenCheckBox.SetActive(isFullScreen);
-        windowScreenCheckBox.SetActive(!isFullScreen);
+    public void WndChangeBtn()
+    {
+        isFullScreen = (isFullScreen == true) ? false : true;
+
+        screenType.text = (isFullScreen == true) ? "FullScreen" : "WndScreen" ;
 
         Screen.SetResolution(setWidth, setHeight, isFullScreen);
     }
 
-    public void BgmSET(float value)
+    public void VolumSET(float value)
     {
-        SM.BGMVolum = value;
-    }
-
-    public void SfxSET(float value)
-    {
-        SM.SFXVolum = value;
+        SM.MasterVolum = value;
+        volumValue.text = value.ToString();
     }
 
 }
