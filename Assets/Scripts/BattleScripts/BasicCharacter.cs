@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,10 +24,10 @@ public class BasicCharacter : MonoBehaviour
     [Header("대쉬 관련 모음")]
 
     [Tooltip("대쉬 파워(힘)")]
-    private const int DASH_POWER = 1000;
+    const int DASH_POWER = 1000;
 
     [Tooltip("대쉬 쿨타임인지 판별")]
-    private bool isDashCoolTime;
+    bool isDashCoolTime;
 
     [Tooltip("대쉬 효과 종료 딜레이")]
     WaitForSeconds dashDelay = new WaitForSeconds(0.1f);
@@ -40,15 +40,15 @@ public class BasicCharacter : MonoBehaviour
     [Header("점프 관련 모음")]
 
     [Tooltip("점프 파워(힘)")]
-    private const int JUMP_POWER = 675;
+    const int JUMP_POWER = 675;
 
     [Tooltip("점프중인지 판별")]
-    private bool isJumping;
+    bool isJumping;
     #endregion
 
     [SerializeField]
     [Tooltip("강체 범위 오브젝트")]
-    private GameObject rigidObj;
+    GameObject rigidObj;
 
     [SerializeField]
     [Tooltip("자신의 Rigidbody2D 컴포넌트")]
@@ -58,7 +58,7 @@ public class BasicCharacter : MonoBehaviour
 
     IEnumerator nowHitAction;
 
-    private void Start()
+    void Start()
     {
         StartSetting();
     }
@@ -72,13 +72,17 @@ public class BasicCharacter : MonoBehaviour
     void StartSetting()
     {
         //Physics2D.IgnoreCollision(GetComponent<BoxCollider2D>(), GetComponentsInChildren<BoxCollider2D>()[1]);
-
-        speedVector = new Vector3(speed, 0, 0);
+        speedVector = Vector3.zero;
+        speedVector.x = speed;
 
         StartCoroutine(Dash());
         StartCoroutine(Jump());
     }
 
+    /// <summary>
+    /// 캐릭터 점프 함수
+    /// </summary>
+    /// <returns></returns>
     IEnumerator Jump()
     {
         while (true)
@@ -139,7 +143,7 @@ public class BasicCharacter : MonoBehaviour
     /// <summary>
     /// 이동 함수
     /// </summary>
-    private void Move()
+    void Move()
     {
         if (Input.GetKey(KeyCode.A))
         {
@@ -173,7 +177,7 @@ public class BasicCharacter : MonoBehaviour
         yield return null;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
