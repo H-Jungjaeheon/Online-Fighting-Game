@@ -11,6 +11,7 @@ public class JoinRoomBtn : MonoBehaviour
 
     public void RoomSet(string name,int headcount, int playerNum, int pass, bool privateRoom)
     {
+        roomValues.roomName = name;
         roomValues.privateRoom = privateRoom;
         roomValues.playerNum = playerNum;
         roomValues.passward = pass;

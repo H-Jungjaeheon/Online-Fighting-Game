@@ -11,6 +11,10 @@ public class Timer : MonoBehaviour
 
     private bool isPause;
 
+    private void Start()
+    {
+        StartSet();
+    }
     public void StartSet()
     {
         time = maxTime;
@@ -33,7 +37,7 @@ public class Timer : MonoBehaviour
         time -= Time.deltaTime;
         int minutes = (int)time / 60;
         int seconds = (int)time % 60;
-        timerTxt.text = minutes.ToString("00") + ":" + seconds.ToString("00");
+        timerTxt.text = minutes.ToString("0") + ":" + seconds.ToString("00");
 
         if (time <= 0) print("stop");
     }

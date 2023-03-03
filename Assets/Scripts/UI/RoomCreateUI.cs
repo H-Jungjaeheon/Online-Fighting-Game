@@ -7,6 +7,7 @@ using TMPro;
 
 public struct RoomValues
 {
+    public string roomName;
     public int playerNum;
     public int passward;
     public bool privateRoom;
@@ -23,6 +24,7 @@ public class RoomCreateUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI playerNumTxt;
 
 
+    [SerializeField] private TMP_InputField nameField;
     [SerializeField] private TMP_InputField passField;
 
     [SerializeField] private GameObject roomCreateChoiceWnd;   
@@ -75,18 +77,25 @@ public class RoomCreateUI : MonoBehaviour
     public void Passward(string pass)
     {
         if (pass.Length < 6 || pass.Length > 6) passField.text = null;
-
-        roomValues.passward = int.Parse(pass);
+        else roomValues.passward = int.Parse(pass);
     }
 
+    public void RoomNameSet(string name)
+    {
+        if (name.Length > 10) nameField.text = null;
+        else roomValues.roomName = name;
+    }
     public void RoomCreateBtn()
     {
+        if (passField.text.Length == 0 || nameField.text.Length == 0) return;
+
         // roomValues 가져다 쓰셈
 
 
         menuBasicBtns.SetActive(true);
         menuRoomBtns.SetActive(false);
         mainBtns.GoBack();
+        gameObject.SetActive(false);
     }
     public void RoomCreateBackBtn()
     {
