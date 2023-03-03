@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using TMPro;
 public enum EMainWndType
 {
     OnlinePlay,
@@ -10,7 +11,9 @@ public enum EMainWndType
     Setting,
     PlayGuid,
     Creators,
-    Exit
+    Exit,
+    CreateRoom,
+    JoinRoom
 }
 public class MainBtns : MonoBehaviour
 {
@@ -24,23 +27,32 @@ public class MainBtns : MonoBehaviour
 
     public void BtnSet(int num)
     {
-        fadeWnd.SetActive(true);
-
         mainWndType = (EMainWndType)num;
-        wnd[((int)mainWndType)].transform.position = wndStartPos;
 
-        fadeWnd.GetComponent<Image>().DOFade(0.3f, 0.5f).OnComplete(() =>
+        if (mainWndType == EMainWndType.OnlinePlay) wnd[num].SetActive(true);
+        else
         {
-            wnd[((int)mainWndType)].transform.DOMoveX(wndEndPos.x, 0.5f);
-        });
-    }
+            fadeWnd.SetActive(true);
+            wnd[((int)mainWndType)].transform.position = wndStartPos;
 
+            fadeWnd.GetComponent<Image>().DOFade(0.3f, 0.5f).OnComplete(() =>
+            {
+                wnd[((int)mainWndType)].transform.DOMoveX(wndEndPos.x, 0.5f);
+            });
+
+        }
+    }
     public void GoBack()
     {
-        wnd[((int)mainWndType)].transform.DOMoveX(wndStartPos.x, 0.5f).OnComplete(() =>
+        if (mainWndType == EMainWndType.OnlinePlay) wnd[((int)mainWndType)].SetActive(false);
+        else
         {
-            fadeWnd.GetComponent<Image>().DOFade(0f, 0.5f).OnComplete(() => fadeWnd.SetActive(false));
-        });
+            wnd[((int)mainWndType)].transform.DOMoveX(wndStartPos.x, 0.5f).OnComplete(() =>
+            {
+                fadeWnd.GetComponent<Image>().DOFade(0f, 0.5f).OnComplete(() => fadeWnd.SetActive(false));
+            });
+
+        }
     }
 
 }
